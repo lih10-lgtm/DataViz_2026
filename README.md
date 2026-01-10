@@ -1,6 +1,6 @@
 # Data Visualization for Social Scientists (Spring 2026)
 
-Here, you can find code for in-person tutorials, .pdfs for practice, as well as problem sets.
+Here, you can find code for in-person tutorials, datasets, as well as problem sets.
 
 ## About This Module
 

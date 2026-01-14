@@ -1,8 +1,8 @@
 key_ID,village,interview_date,no_membrs,years_liv,respondent_wall_type,rooms,memb_assoc,affect_conflicts,liv_count,items_owned,no_meals,months_lack_food
 1,God,2016-11-17T00:00:00Z,3,4,muddaub,1,NULL,NULL,1,bicycle;television;solar_panel;table,2,Jan
-1,God,2016-11-17T00:00:00Z,7,9, muddaub,1,yes,once,3,cow_cart;bicycle;radio;cow_plough;solar_panel;solar_torch;table;mobile_phone,2,Jan;Sept;Oct;Nov;Dec
-3,God,2016-11-17T00:00:00Z,10,15, burntbricks,1,NULL,NULL,1,solar_torch,2,Jan;Feb;Mar;Oct;Nov;Dec
-4,God,2016-11-17T00:00:00Z,7,6, burntbricks,1,NULL,NULL,2,bicycle;radio;cow_plough;solar_panel;mobile_phone,2,Sept;Oct;Nov;Dec
+1,God,2016-11-17T00:00:00Z,7,9,muddaub,1,yes,once,3,cow_cart;bicycle;radio;cow_plough;solar_panel;solar_torch;table;mobile_phone,2,Jan;Sept;Oct;Nov;Dec
+3,God,2016-11-17T00:00:00Z,10,15,burntbricks,1,NULL,NULL,1,solar_torch,2,Jan;Feb;Mar;Oct;Nov;Dec
+4,God,2016-11-17T00:00:00Z,7,6,burntbricks,1,NULL,NULL,2,bicycle;radio;cow_plough;solar_panel;mobile_phone,2,Sept;Oct;Nov;Dec
 5,God,2016-11-17T00:00:00Z,7,40,burntbricks,1,NULL,NULL,4,motorcyle;radio;cow_plough;mobile_phone,2,Aug;Sept;Oct;Nov
 6,God,2016-11-17T00:00:00Z,3,3,muddaub,1,NULL,NULL,1,NULL,2,Aug;Sept;Oct
 7,God,2016-11-17T00:00:00Z,6,38,muddaub,1,no,never,1,motorcyle;cow_plough,3,Nov

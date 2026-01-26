@@ -1,0 +1,305 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage{graphicx,textcomp}
+\usepackage{natbib}
+\usepackage{setspace}
+\usepackage{fullpage}
+\usepackage{color}
+\usepackage[reqno]{amsmath}
+\usepackage{amsthm}
+\usepackage{fancyvrb}
+\usepackage{amssymb,enumerate}
+\usepackage[all]{xy}
+\usepackage{endnotes}
+\usepackage{lscape}
+\newtheorem{com}{Comment}
+\usepackage{float}
+\usepackage{hyperref}
+\newtheorem{lem} {Lemma}
+\newtheorem{prop}{Proposition}
+\newtheorem{thm}{Theorem}
+\newtheorem{defn}{Definition}
+\newtheorem{cor}{Corollary}
+\newtheorem{obs}{Observation}
+\usepackage[compact]{titlesec}
+\usepackage{dcolumn}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usepackage{multirow}
+\usepackage{xcolor}
+\newcolumntype{.}{D{.}{.}{-1}}
+\newcolumntype{d}[1]{D{.}{.}{#1}}
+\definecolor{light-gray}{gray}{0.65}
+\usepackage{url}
+\usepackage{listings}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+	backgroundcolor=\color{backcolour},   
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{magenta},
+	numberstyle=\tiny\color{codegray},
+	stringstyle=\color{codepurple},
+	basicstyle=\footnotesize\ttfamily,
+	breakatwhitespace=false,         
+	breaklines=true,                 
+	captionpos=b,                    
+	keepspaces=true,                 
+	numbers=left,                    
+	numbersep=5pt,                  
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=false,                  
+	tabsize=2
+}
+\lstset{style=mystyle}
+\newcommand{\Sref}[1]{Section~\ref{#1}}
+\newtheorem{hyp}{Hypothesis}
+
+\title{Problem Set 1}
+\date{\today}
+\author{Hanyu Li(ID:25346841)}
+
+\begin{document}
+	\maketitle
+	
+	\section*{Instructions}
+	\begin{itemize}
+		\item Please show your work! You may lose points by simply writing in the answer. If the problem requires you to execute commands in \texttt{R}, please include the code you used to get your answers. Please also include the \texttt{.R} file that contains your code. If you are not sure if work needs to be shown for a particular problem, please ask.
+		\item Your homework should be submitted electronically on GitHub.
+		\item This problem set is due before 23:59 on Wednesday January 28, 2026. No late assignments will be accepted.
+	\end{itemize}
+	
+	\vspace{1cm}
+	\section*{Roll Call Votes in the European Parliament}
+	
+	\subsection*{Data Manipulation}
+	First, you need to \href{https://personal.lse.ac.uk/hix/HixNouryRolandEPdata.HTM}{download data} from the first six elected European Parliaments on each MEP and how they voted in each recorded roll-call vote.
+	
+	\vspace{.25cm}
+	
+	\begin{enumerate}
+		\setlength{\itemsep}{2em} 
+		
+		\item Load these datasets into your global environment:
+		\begin{itemize}
+			\item \texttt{mep\_info\_26Jul11.xls} (MEP characteristics, EP1–EP5)
+			\item \texttt{rcv\_ep1.txt} (EP1 roll-call votes)
+		\end{itemize}
+		
+		\item Briefly describe (2–3 sentences each) the unit of analysis and key variables in each of these two datasets.
+		
+		Dataset 1: For the \texttt{mep\_info\_26Jul11} dataset, the unit of analysis is the individual Member of the European Parliament (MEP). This dataset contains the background characteristics of MEPs, covering the first to fifth parliaments (EP1-EP5). The key variables include \textit{MEPID} as a unique identifier, categorical variables for party affiliation (National Party based on member state and EP Group based on political ideology), and two continuous variables (\textit{nomdim1} and \textit{nomdim2}) representing the MEP's NOMINATE coordinates on two key ideological dimensions. Specifically, \textit{nomdim1} measures the MEP's position on the traditional Left/Right ideological spectrum, while \textit{nomdim2} captures their attitude towards European integration (Pro-EU vs. Eurosceptic), with both scores typically ranging from $-1$ to $+1$.
+		
+		Dataset 2: The unit of analysis for the \texttt{rcv\_ep1} dataset is the individual MEP, showcasing their specific voting behaviors across all recorded sessions in EP1. The dataset records individual decisions on specific roll-call votes. The key variables are the vote columns ($V_{1}\dots V_{886}$), which are categorically coded as: $1=\text{Yes}$, $2=\text{No}$, $3=\text{Abstain}$, $4=\text{Present but did not vote}$, $0=\text{Absent}$, and $5=\text{Not an MEP}$.
+		
+		\item The \texttt{rcv\_ep1} data are in a wide format, with $V_1, V_2, \dots, V_n$ as separate vote columns.
+		\begin{itemize}
+			\item Identify which columns are ID/metadata (\textit{MEPID, MEPNAME, MS, NP, EPG}) and which columns are vote decisions ($V_1\dots V_n$). Tidy the voting data such that each row/observation is a single vote for a single MEP.\\
+			The codes are as below:
+			\lstinputlisting[language=R, firstline=1, lastline=21]{PS01_HL.R}
+			
+			Top 6 rows in the tidy table are shown as below: with the first 5 columns showing MEP information and the last 2 rows representing vote items and decisions.
+			\begin{verbatim}
+				MEPID MEPNAME      MS    NP    EPG   Vote_item Decision
+				<chr> <chr>        <chr> <fct> <fct> <chr>     <fct>
+				1 2   ABENS Victor L     1804  S     V1        2
+				2 2   ABENS Victor L     1804  S     V2        2
+				3 2   ABENS Victor L     1804  S     V3        4
+				4 2   ABENS Victor L     1804  S     V4        0
+				5 2   ABENS Victor L     1804  S     V5        0
+				6 2   ABENS Victor L     1804  S     V6        0
+			\end{verbatim}
+			
+			\item Create a summary table of counts of decision categories (e.g. Yes/No/Abstain/Present but did not vote/Absent) across all votes.\\
+			The codes are as below:
+			\lstinputlisting[language=R, firstline=23, lastline=32]{PS01_HL.R}
+			
+			The summary table is as follows:
+			\begin{verbatim}
+				Decision                 n
+				<fct>                    <int>
+				1 Yes                    88185
+				2 No                     75171
+				3 Abstain                9577
+				4 Present but did not vote 109224
+				5 Absent                 99753
+				6 Not an MEP             103618
+			\end{verbatim}
+		\end{itemize}
+		
+		\item Construct a new dataset that combines MEP-level information with their vote decisions from EP1 in long format (from part 3). Check for missingness.
+		
+		The codes and a preview of combined dataset are as below:
+		\lstinputlisting[language=R, firstline=34, lastline=47]{PS01_HL.R}
+		
+		\begin{lstlisting}[basicstyle=\scriptsize\ttfamily, breaklines=false]
+			MEPID MEPNAME      MS    NP    EPG   Vote_item Decision                  `NOM-D1` `NOM-D2`
+			<chr> <chr>        <chr> <fct> <fct> <chr>     <fct>                     <dbl>    <dbl>
+			1 2   ABENS Victor L     1804  S     V1        No                        -0.021    0.245
+			2 2   ABENS Victor L     1804  S     V2        No                        -0.021    0.245
+			3 2   ABENS Victor L     1804  S     V3        Present but did not vote  -0.021    0.245
+			4 2   ABENS Victor L     1804  S     V4        Absent                    -0.021    0.245
+			5 2   ABENS Victor L     1804  S     V5        Absent                    -0.021    0.245
+			6 2   ABENS Victor L     1804  S     V6        Absent                    -0.021    0.245
+		\end{lstlisting}
+		
+		Then we check and report the missing values. We can find that 42528 missing values in \textit{NOM-D1} and \textit{NOM-D2}. Given each row shows a single vote for a single MEP, this indicates that background information is missing for $\frac{42528}{886} = 48$ specific MEPs.
+		\lstinputlisting[language=R, firstline=49, lastline=51]{PS01_HL.R}
+		
+		\begin{verbatim}
+			missing_repo
+			MEPID  MEPNAME  MS  NP  EPG Vote_item Decision  NOM-D1  NOM-D2 
+			0      0        0   0   0   0         0         42528   42528 
+		\end{verbatim}
+		
+		\item Compute, for each EP group in EP1:
+		\begin{itemize}
+			\item The mean rate of Yes votes (Yes over Yes+No+Abstain) across all roll calls.\\
+			We can see the mean rate of Yes votes for each EP group in EP1 ranging from $41.5\%$ to $58.1\%$.
+			\lstinputlisting[language=R, firstline=53, lastline=59]{PS01_HL.R}
+			
+			\begin{verbatim}
+				EPG    Yes_rate
+				<fct>  <dbl>
+				1 C    0.415
+				2 E    0.509
+				3 G    0.512
+				4 L    0.486
+				5 M    0.528
+				6 N    0.581
+				7 R    0.457
+				8 S    0.576
+			\end{verbatim}
+			
+			\item The mean abstention rate.\\
+			We can see the mean rate of Abstention for each EP group in EP1 ranging from $2.15\%$ to $26.5\%$.
+			\lstinputlisting[language=R, firstline=61, lastline=66]{PS01_HL.R}
+			
+			\begin{verbatim}
+				EPG    Abstention_rate
+				<fct>           <dbl>
+				1 C             0.0752
+				2 E             0.0215
+				3 G             0.0697
+				4 L             0.0632
+				5 M             0.0800
+				6 N             0.0562
+				7 R             0.265 
+				8 S             0.0574
+			\end{verbatim}
+			
+			\item The mean vote preferences along the two contested dimensions (\textit{NOM-D1} and \textit{NOM-D2}).\\
+			Since dataset `\texttt{rcv\_ep1}' records one MEP who was not categorized to any EP Group, so here I drop this case when computing the mean vote preferences along the two contested dimensions.
+			\lstinputlisting[language=R, firstline=68, lastline=76]{PS01_HL.R}
+			
+			\begin{verbatim}
+				EPG    D1_mean D2_mean
+				<fct>  <dbl>   <dbl>
+				1 C    0.811   0.530 
+				2 E    0.512  -0.277 
+				3 G    0.280  -0.818 
+				4 L    0.409  -0.324 
+				5 M   -0.357  -0.201 
+				6 N    0.250  -0.386 
+				7 R   -0.586  -0.0419
+				8 S   -0.0980  0.261 
+			\end{verbatim}
+		\end{itemize}
+	\end{enumerate}
+	
+	\subsection*{Data Visualization}
+	
+	\begin{enumerate}
+		\setlength{\itemsep}{2em}
+		
+		\item Plot the distribution of the first NOMINATE dimension by EP group, and explain any trends you see.
+		
+		As each MEP is observed repeatedly across votes, duplicate observations of the first NOMINATE dimension were removed prior to analysis. Since we want to explore the data distribution, here I first chose boxplot to do visualization.
+		Moreover, as EP group categories recur across later figures, their color coding was standardized.
+		All grouping variables used in subsequent analyses were standardized, with categorical variables treated as characters and temporal variables (e.g., year) treated as integers.
+		
+		\lstinputlisting[language=R, firstline=79, lastline=104]{PS01_HL.R}
+		
+		\begin{figure}[H]
+			\centering
+			\caption{Distribution of Ideological Positions by EP Group}
+			\label{fig:plot_1}
+			\includegraphics[width=.75\textwidth]{plot1.pdf}
+		\end{figure}
+		
+		As shown in Figure \ref{fig:plot_1}, first, the data reveals a sharp ideological polarization between the EP groups along the traditional Left/Right dimension. The groups are clearly divided: Groups C, E, G, L, and N are consistently positioned on the right (scores $> 0$), with Group C exhibiting the most pronounced conservative stance (median $\approx 0.8$). Conversely, Groups M, R, and S occupy the left-wing spectrum (scores $< 0$), where Group R represents the furthest left position with a median of approximately $-0.5$.
+		
+		Second, the groups display significant variation in internal cohesion. The right-leaning Groups C, E, and L demonstrate high cohesion, evidenced by their compressed box plots and concentrated score distributions. In contrast, the left-leaning Group M and the right-leaning Group N show lower internal unity; their elongated box plots indicate a more dispersed distribution of preferences and greater ideological heterogeneity within these groups.
+		
+		\item Make a scatterplot of \textit{nomdim1} (x-axis) and \textit{nomdim2} (y-axis), with one point per MEP and color by EP group.
+		\lstinputlisting[language=R, firstline=107, lastline=124]{PS01_HL.R}
+		
+		\begin{figure}[H]
+			\centering
+			\caption{MEP Ideological Alignment}
+			\label{fig:plot_2}
+			\includegraphics[width=.75\textwidth]{plot2.pdf}
+		\end{figure}
+		
+		We can see from Figure \ref{fig:plot_2} that these two dimensions effectively separate MEPs into distinct clusters based on their EP group affiliation. Notably, Group C forms a clearly defined cluster, exhibiting a strong right-wing and pro-European integration stance.
+		
+		\item Produce a boxplot of the proportion voting \textit{Yes} by EP group to visualize cohesion.
+		\lstinputlisting[language=R, firstline=127, lastline=153]{PS01_HL.R}
+		
+		\begin{figure}[H]
+			\centering
+			\caption{Proportion of Yes Votes by EP Group}
+			\label{fig:plot_3}
+			\includegraphics[width=.75\textwidth]{plot3.pdf}
+		\end{figure}
+		
+		Figure \ref{fig:plot_3} reveals a broad distribution of Yes vote shares across roll calls for all EP groups, indicating significant variability in voting outcomes. Specifically, in terms of median values, Group E displays the highest rate of affirmative votes, whereas Group C exhibits the lowest.
+		
+		\item Display the proportion voting \textit{Yes} per year by national party using a bar plot.
+		
+		Since the combined data set lacks year information for each call roll, I integrated dataset \texttt{vote\_info\_Jun2010.xls} including the number and date of the vote to get complete data for plotting later.
+		
+		Code lines for integration and the final data set are as below:
+		\lstinputlisting[language=R, firstline=156, lastline=171]{PS01_HL.R}
+		
+		\begin{lstlisting}[basicstyle=\tiny\ttfamily] 
+			> head(com_ep1)
+			# A tibble: 6 × 10
+			MEPID MEPNAME      MS    NP    EPG   Vote_item Decision              `NOM-D1` `NOM-D2` Year
+			<chr> <chr>        <chr> <fct> <fct> <chr>     <fct>                 <dbl>    <dbl>    <int>
+			1 2   ABENS Victor L     1804  S     V1        No                    -0.021    0.245    1979
+			2 2   ABENS Victor L     1804  S     V2        No                    -0.021    0.245    1979
+			3 2   ABENS Victor L     1804  S     V3        Present but did not vote -0.021 0.245    1979
+			4 2   ABENS Victor L     1804  S     V4        Absent                -0.021    0.245    1979
+			5 2   ABENS Victor L     1804  S     V5        Absent                -0.021    0.245    1979
+			6 2   ABENS Victor L     1804  S     V6        Absent                -0.021    0.245    1979
+		\end{lstlisting}
+		
+		Codes for data wrangling and plotting are as follow:
+		\lstinputlisting[language=R, firstline=173, lastline=202]{PS01_HL.R}
+		
+		\begin{figure}[H]
+			\centering
+			\caption{Proportion of Yes Votes per Year by National Party}
+			\label{fig:plot_4}
+			\includegraphics[width=.75\textwidth]{plot4.pdf}
+		\end{figure}
+		
+		\item For each EP group, calculate the average \textit{Yes} share per year and plot a line graph.
+		
+		Codes for data wrangling and plotting are as follow:
+		\lstinputlisting[language=R, firstline=205, lastline=235]{PS01_HL.R}
+		
+		\begin{figure}[H]
+			\centering
+			\caption{Average Yes Share per Year by EP Group}
+			\label{fig:plot_5}
+			\includegraphics[width=.75\textwidth]{plot5.pdf}
+		\end{figure}
+	\end{enumerate}
+	
+\end{document}

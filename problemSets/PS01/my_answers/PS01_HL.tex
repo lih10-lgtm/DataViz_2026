@@ -38,21 +38,21 @@
 \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
 
 \lstdefinestyle{mystyle}{
-	backgroundcolor=\color{backcolour},   
+	backgroundcolor=\color{backcolour},
 	commentstyle=\color{codegreen},
 	keywordstyle=\color{magenta},
 	numberstyle=\tiny\color{codegray},
 	stringstyle=\color{codepurple},
 	basicstyle=\footnotesize\ttfamily,
-	breakatwhitespace=false,         
-	breaklines=true,                 
-	captionpos=b,                    
-	keepspaces=true,                 
-	numbers=left,                    
-	numbersep=5pt,                  
-	showspaces=false,                
+	breakatwhitespace=false,
+	breaklines=true,
+	captionpos=b,
+	keepspaces=true,
+	numbers=left,
+	numbersep=5pt,
+	showspaces=false,
 	showstringspaces=false,
-	showtabs=false,                  
+	showtabs=false,
 	tabsize=2
 }
 \lstset{style=mystyle}
@@ -82,7 +82,7 @@
 	\vspace{.25cm}
 	
 	\begin{enumerate}
-		\setlength{\itemsep}{2em} 
+		\setlength{\itemsep}{2em}
 		
 		\item Load these datasets into your global environment:
 		\begin{itemize}
@@ -136,7 +136,7 @@
 		The codes and a preview of combined dataset are as below:
 		\lstinputlisting[language=R, firstline=34, lastline=47]{PS01_HL.R}
 		
-		\begin{lstlisting}[basicstyle=\scriptsize\ttfamily, breaklines=false]
+		\begin{lstlisting}[basicstyle=\tiny\ttfamily, breaklines=false]
 			MEPID MEPNAME      MS    NP    EPG   Vote_item Decision                  `NOM-D1` `NOM-D2`
 			<chr> <chr>        <chr> <fct> <fct> <chr>     <fct>                     <dbl>    <dbl>
 			1 2   ABENS Victor L     1804  S     V1        No                        -0.021    0.245
@@ -266,9 +266,9 @@
 		Code lines for integration and the final data set are as below:
 		\lstinputlisting[language=R, firstline=156, lastline=171]{PS01_HL.R}
 		
-		\begin{lstlisting}[basicstyle=\tiny\ttfamily] 
+		\begin{lstlisting}[basicstyle=\tiny\ttfamily]
 			> head(com_ep1)
-			# A tibble: 6 × 10
+			# A tibble: 6 x 10
 			MEPID MEPNAME      MS    NP    EPG   Vote_item Decision              `NOM-D1` `NOM-D2` Year
 			<chr> <chr>        <chr> <fct> <fct> <chr>     <fct>                 <dbl>    <dbl>    <int>
 			1 2   ABENS Victor L     1804  S     V1        No                    -0.021    0.245    1979

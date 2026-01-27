@@ -142,7 +142,7 @@ plot3 <- ggplot(vote_cal, aes(x = EPG, y = yes_prop, fill = EPG)) +
   labs(
     title = "Proportion of Voting Yes by EP Group (per Roll Call)",
     x = "EP Group",
-    y = "Proportion of Yes Votes ") +
+    y = "Proportion of Yes Votes(EP1) ") +
   theme_bw() +
   theme(
     plot.title = element_text(size = 14,hjust = 0.5, face = "bold"),
@@ -180,12 +180,12 @@ np_votes <- com_ep1 |>
 
 # Plot the bar plot
 pdf("plot4.pdf")
-plot4 <- ggplot(np_votes, aes(x = Year, y = np_yes, fill = NP)) +
+plot4 <- ggplot(np_votes, aes(x = as.factor(Year), y = np_yes, fill = NP)) +
   geom_col(position = "dodge", alpha = 0.8, color = NA) + 
   scale_fill_viridis_d(option = "mako", begin = 0.1, end = 0.9)  +
   scale_y_continuous(limits = c(0, 1), labels = percent_format()) +
   labs(
-    title = "Proportion of Voting Yes per Year by National Party",
+    title = "Proportion of Voting Yes per Year by National Party(EP1)",
     x = "Year",
     y = "Proportion of Yes Votes",
     fill = "National Party") +
@@ -219,7 +219,7 @@ plot5 <- ggplot(epg_votes, aes(x = Year, y = mean_yes, color = EPG, group = EPG)
   scale_color_brewer(palette = "Set1", name = "EP Group") +
   scale_y_continuous(limits = c(0, 1), labels = percent_format()) +
   labs(
-    title = "Average Yes Share per Year by EP Group",
+    title = "Average Yes Share per Year by EP Group(EP1)",
     x = "Year",
     y = "Average Yes Share",
     color = "EP Group"

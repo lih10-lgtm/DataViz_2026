@@ -1,0 +1,173 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage{graphicx,textcomp}
+\usepackage{natbib}
+\usepackage{setspace}
+\usepackage{fullpage}
+\usepackage{color}
+\usepackage[reqno]{amsmath}
+\usepackage{amsthm}
+\usepackage{fancyvrb}
+\usepackage{amssymb,enumerate}
+\usepackage[all]{xy}
+\usepackage{endnotes}
+\usepackage{lscape}
+\newtheorem{com}{Comment}
+\usepackage{float}
+\usepackage{hyperref}
+\newtheorem{lem}{Lemma}
+\newtheorem{prop}{Proposition}
+\newtheorem{thm}{Theorem}
+\newtheorem{defn}{Definition}
+\newtheorem{cor}{Corollary}
+\newtheorem{obs}{Observation}
+\usepackage[compact]{titlesec}
+\usepackage{dcolumn}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usepackage{multirow}
+\usepackage{xcolor}
+\newcolumntype{.}{D{.}{.}{-1}}
+\newcolumntype{d}[1]{D{.}{.}{#1}}
+\definecolor{light-gray}{gray}{0.65}
+\usepackage{url}
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+	backgroundcolor=\color{backcolour},
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{magenta},
+	numberstyle=\tiny\color{codegray},
+	stringstyle=\color{codepurple},
+	basicstyle=\footnotesize,
+	breakatwhitespace=false,
+	breaklines=true,
+	captionpos=b,
+	keepspaces=true,
+	numbers=left,
+	numbersep=5pt,
+	showspaces=false,
+	showstringspaces=false,
+	showtabs=false,
+	tabsize=2
+}
+\lstset{style=mystyle}
+\newcommand{\Sref}[1]{Section~\ref{#1}}
+\newtheorem{hyp}{Hypothesis}
+
+\title{Problem Set 2}
+\date{\today}
+\author{Hanyu Li(ID:25346841)}
+
+\begin{document}
+	\maketitle
+	
+	\section*{Instructions}
+	\begin{itemize}
+		\item Please show your work! You may lose points by simply writing in the answer. If the problem requires you to execute commands in \texttt{R}, please include the code you used to get your answers. Please also include the \texttt{.R} file that contains your code. If you are not sure if work needs to be shown for a particular problem, please ask.
+		\item Your homework should be submitted electronically on GitHub.
+		\item This problem set is due before 23:59 on Wednesday February 4, 2026. No late assignments will be accepted.
+	\end{itemize}
+	
+	\vspace{0.4cm}
+	\section*{Study of Religious Congregations in Switzerland}
+	
+	The data for this problem set come from the National Congregations Study Switzerland (NCSS), which was conducted in 2008–2009 and 2022–2023. The data provide information on organisational structure, staffing, finances, worship practices, youth and educational activities, social composition, external engagement, and inclusion norms. The data were collected using stratified random samples of congregations drawn from comprehensive censuses, with interviews completed by a single knowledgeable key informant in each congregation, most often the spiritual leader.
+	
+	\subsection*{Data Manipulation}
+	
+	\begin{enumerate}
+		\setlength{\itemsep}{1.2em}
+		
+		\item Load the NCSS .csv file from \href{https://raw.githubusercontent.com/ASDS-TCD/DataViz_2026/refs/heads/main/datasets/NCSS_v1.csv}{GitHub} into your global environment. Use the \texttt{select()} function to keep these variables in your dataframe:
+		\begin{itemize}
+			\item Congregation ID (\texttt{CASEID})
+			\item Year (\texttt{YEAR})
+			\item Region (\texttt{GDREGION})
+			\item Number of official members (\texttt{NUMOFFMBR})
+			\item 6-level religious classification (\texttt{TRAD6})
+			\item 12-level religious classification (\texttt{TRAD12})
+			\item Total income in last fiscal year (\texttt{INCOME})
+		\end{itemize}
+		\lstinputlisting[language=R, firstline=7, lastline=10]{PS02_HL.R}
+		
+		\item Filter the dataset so that you only include Christian, Jewish, and Muslim congregations (Chrétiennes, Juives, Musulmanes) using the \texttt{TRAD6} variable.
+		\lstinputlisting[language=R, firstline=12, lastline=14]{PS02_HL.R}
+		
+		\item Compute the number of congregations by religious classification (\texttt{TRAD6}) in each year, as well as the mean and median total income in the last fiscal year (\texttt{INCOME}) by religious classification and year.
+		\lstinputlisting[language=R, firstline=16, lastline=23]{PS02_HL.R}
+		
+		The outcome is shown in Table 1.
+		\begin{table}[H]
+			\centering
+			\caption{Average and Median Income by Religion and Year}
+			\label{tab:1}
+			\begin{tabular}{lcccc}
+				\hline
+				Religion & Year & Count & Mean Income & Median Income \\
+				\hline
+				Chrétiennes & 2009 & 802  & 539,942  & 200,000 \\
+				Chrétiennes & 2022 & 1,172 & 474,601  & 201,000 \\
+				Juives      & 2009 & 18   & 330,909  & 200,000 \\
+				Juives      & 2022 & 13   & 2,332,500 & 115,000 \\
+				Musulmanes  & 2009 & 64   & 62,238   & 25,000 \\
+				Musulmanes  & 2022 & 42   & 77,941   & 42,500 \\
+				\hline
+			\end{tabular}
+		\end{table}
+		
+		\item Create a categorical variable called \texttt{AVG\_INCOME} that is binary, where 1 indicates average or above-average income and 0 indicates below-average income within each year. To prepare for subsequent visualization tasks, \texttt{AVG\_INCOME} was transformed into a factor at the beginning of the workflow.
+		\lstinputlisting[language=R, firstline=26, lastline=36]{PS02_HL.R}
+		
+	\end{enumerate}
+	
+	\subsection*{Data Visualization}
+	
+	\begin{enumerate}
+		\setlength{\itemsep}{1.2em}
+		
+		\item Create a bar plot visualizing the proportion of congregations above and below the average income (\texttt{AVG\_INCOME}) in each year by 12-level religious classification (\texttt{TRAD12}). To improve the readability of the congregation category labels, the x- and y-axes were flipped.
+		\lstinputlisting[language=R, firstline=38, lastline=58]{PS02_HL.R}
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=.8\textwidth]{plot1.pdf}
+			\caption{Proportion of Congregations Above and Below Average Income}
+			\label{fig:plot_1}
+		\end{figure}
+		
+		\item Make a bar plot using \texttt{geom\_col()} showing the number of official members by 12-level religious classification (\texttt{TRAD12}), distinguishing between 6-level religious classifications (\texttt{TRAD6}) in 2022. The same color scheme was used to maintain visual consistency.
+		\lstinputlisting[language=R, firstline=64, lastline=88]{PS02_HL.R}
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=.8\textwidth]{plot2.pdf}
+			\caption{Number of Official Members by Religious Classification}
+			\label{fig:plot_2}
+		\end{figure}
+		
+		\item Display the distribution of average yearly income (\texttt{INCOME}) for congregations in 2022 across regions (\texttt{GDREGION}) using ridge plots. Regional income means are highlighted with orange points.
+		\lstinputlisting[language=R, firstline=93, lastline=130]{PS02_HL.R}
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=.8\textwidth]{plot3.pdf}
+			\caption{Distribution of Average Income by Region}
+			\label{fig:plot_3}
+		\end{figure}
+		
+		\item Create a boxplot of the number of official members per congregation in 2022 by religious classification (\texttt{TRAD6}) and region (\texttt{GDREGION}). Because the maximum number of official members is very large, the y-axis was restricted to the range 0–5,000 to improve visual comparability across religious groups.
+		\lstinputlisting[language=R, firstline=134, lastline=163]{PS02_HL.R}
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=.8\textwidth]{plot4.pdf}
+			\caption{Number of Official Members by Religion and Region}
+			\label{fig:plot_4}
+		\end{figure}
+		
+	\end{enumerate}
+	
+\end{document}
+

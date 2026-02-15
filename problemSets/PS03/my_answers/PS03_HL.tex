@@ -1,0 +1,158 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage{graphicx,textcomp}
+\usepackage{natbib}
+\usepackage{setspace}
+\usepackage{fullpage}
+\usepackage{color}
+\usepackage[reqno]{amsmath}
+\usepackage{amsthm}
+\usepackage{fancyvrb}
+\usepackage{amssymb,enumerate}
+\usepackage[all]{xy}
+\usepackage{endnotes}
+\usepackage{lscape}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage[compact]{titlesec}
+\usepackage{dcolumn}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{url}
+\usepackage{listings}
+\usepackage{enumitem}
+
+\setlist[enumerate]{itemsep=3em, topsep=1em, partopsep=0pt}
+\titlespacing*{\subsection}{0pt}{1.5ex plus 1ex minus .2ex}{1.2ex plus .2ex}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.97,0.97,0.95}
+
+\lstdefinestyle{mystyle}{
+	backgroundcolor=\color{backcolour},   
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{magenta},
+	numberstyle=\tiny\color{codegray},
+	stringstyle=\color{codepurple},
+	basicstyle=\ttfamily\footnotesize,
+	breakatwhitespace=false,         
+	breaklines=true,                 
+	captionpos=b,                    
+	keepspaces=true,                 
+	numbers=left,                    
+	numbersep=8pt,                  
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=false,                  
+	tabsize=2,
+	frame=single,
+	rulecolor=\color{light-gray}
+}
+\lstset{style=mystyle}
+
+\newcolumntype{.}{D{.}{.}{-1}}
+\newcolumntype{d}[1]{D{.}{.}{#1}}
+\definecolor{light-gray}{gray}{0.65}
+
+\title{\textbf{Problem Set 3}}
+\author{Hanyu Li (25346841)}
+\date{February 18, 2026}
+
+\begin{document}
+	\maketitle
+	\setstretch{1.1}
+	
+	\section*{Instructions}
+	\begin{itemize}[itemsep=0.5ex]
+		\item Please show your work! You may lose points by simply writing in the answer. If the problem requires you to execute commands in \texttt{R}, please include the code you used to get your answers. Please also include the \texttt{.R} file that contains your code. If you are not sure if work needs to be shown for a particular problem, please ask.
+		\item Your homework should be submitted electronically on GitHub.
+		\item This problem set is due before 23:59 on Wednesday February 18, 2026. No late assignments will be accepted.
+	\end{itemize}
+	
+	\vspace{0.5cm}
+	\section*{Canadian Election Study}
+	
+	The data for this problem set come from the Canadian Election Study (\href{https://ces-eec.sites.olt.ubc.ca/files/2017/04/CES2015_Combined_Data_Codebook.pdf}{CES}) in 2015. The main purpose of the study is to give a comprehensive picture of the Canadian election: why people vote as they do, what changes during campaigns and across elections, and how Canadian voting compares with that in other democracies.
+	
+	\subsection*{Data Manipulation}
+	
+	\begin{enumerate}
+		\item Load the CES .csv file from \href{https://raw.githubusercontent.com/ASDS-TCD/DataViz_2026/refs/heads/main/datasets/CES2015.csv}{GitHub} into your global environment. Filter respondents to only include "high quality" participants: 
+		
+		\medskip
+		\begin{verbatim}
+			ces2015 <- ces2015 |> filter(discard == "Good quality")
+		\end{verbatim}
+		
+		\item Filter the dataset to those participants that answered the question about voting for the past election using \texttt{p\_voted}. Consider respondents who gave a "Yes" answer as having voted, while “No” as not having voted. Treat “Don’t know” and “Refused” as missing.
+		
+		\medskip
+		We filtered the data and created a new variable \textit{rec\_voter}, where "No" = 0 and "Yes" = 1 and treated “Don’t know” and “Refused” as missing values.
+		
+		\lstinputlisting[language=R, firstline=6, lastline=22]{PS03_HL.R}
+		\begin{verbatim}
+			head(ces_clean$rec_voter)
+			[1]  1 NA NA  1  1 NA
+		\end{verbatim}
+		
+		\item Create an age variable and group into categories (e.g., $<$30, 30-44, 45-64, 65+). Year of birth is in age (four‑digit year).
+		
+		\medskip
+		Here we first turned the character type of \textit{age} to numeric, then we could calculate respondents' real age by subtraction.
+		\lstinputlisting[language=R, firstline=25, lastline=36]{PS03_HL.R}
+		\begin{verbatim}
+			> summary(ces_final$age_group)
+			<30 30-44 45-64   65+  NA's 
+			1414  2053  3812  2518   185 
+		\end{verbatim}
+	\end{enumerate}
+	
+	\newpage
+	\subsection*{Data Visualization}
+	
+	\begin{enumerate}
+		\item Plot turnout rate by age group.
+		
+		\medskip
+		\lstinputlisting[language=R, firstline=39, lastline=67]{PS03_HL.R}
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=.85\textwidth]{plot1.pdf}
+		\end{figure}
+		
+		\item Create a density plot of ideology by party, restricting your sample to respondents with non‑missing left–right self‑placement (0–10 scale) and those that intended to vote for a main party (e.g., Liberal, Conservative, NDP, Bloc in Quebec, and Green).
+		
+		\medskip
+		Given variable \textit{p\_selfplace} includes missing values, we first cleaned the data.
+		\lstinputlisting[language=R, firstline=70, lastline=106]{PS03_HL.R}
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=.85\textwidth]{plot2.pdf}
+		\end{figure}
+		
+		\item Produce histogram counts of turnout by income (\texttt{income\_full}), faceted by province.
+		
+		\medskip
+		Similarly, variable \textit{income\_full} includes missing values and abnormal values like '.d' and '.r', so we removed these values than created the plot.
+		\lstinputlisting[language=R, firstline=109, lastline=161]{PS03_HL.R}
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=.95\textwidth]{plot3.pdf}
+		\end{figure}
+		
+		\item Create your own reusable custom theme. Apply your theme to one of the previous plots and add a series of informative enhancements.
+		
+		\medskip
+		A minimalist visualization theme that standardizes plot margins, titles, and axis label formatting against a clean white background was developed here and applied to the first plot. What's more, the visualization was made more informative by incorporating core data trends, key extrema, the data source, and details regarding the sample and coding methodology.
+		
+		\lstinputlisting[language=R, firstline=164, lastline=219]{PS03_HL.R}
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=.85\textwidth]{plot1_v2.pdf}
+		\end{figure}
+	\end{enumerate}
+	
+\end{document}
